@@ -19,6 +19,11 @@ public class BalanceDomain {
         return from(amountDomain1);
     }
 
+    public BalanceDomain subtract(AmountDomain amountDomain) {
+        AmountDomain amountDomain1 = this.amountDomain.subtract(amountDomain);
+        return from(amountDomain1);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

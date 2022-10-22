@@ -17,8 +17,9 @@ public class AccountDomain {
         return from(balanceDomain);
     }
 
-    public AccountDomain withdrawal(AmountDomain newAmountDomain) {
-        return null;
+    public AccountDomain withdrawal(AmountDomain amountDomain) {
+        BalanceDomain balanceDomain = this.balanceDomain.subtract(amountDomain);
+        return from(balanceDomain);
     }
 
     public BalanceDomain getBalance() {

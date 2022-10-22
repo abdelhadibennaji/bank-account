@@ -16,7 +16,11 @@ public class AmountDomain {
     }
 
     public AmountDomain Add(AmountDomain amountDomain) {
-        return from(value.add(amountDomain.value));
+        return from(this.value.add(amountDomain.value));
+    }
+
+    public AmountDomain subtract(AmountDomain amountDomain) {
+        return from(this.value.subtract(amountDomain.value));
     }
 
     @Override
