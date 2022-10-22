@@ -17,6 +17,10 @@ public class AccountDomain {
         return from(balanceDomain);
     }
 
+    public AccountDomain withdrawal(AmountDomain newAmountDomain) {
+        return null;
+    }
+
     public BalanceDomain getBalance() {
         return balanceDomain;
     }
