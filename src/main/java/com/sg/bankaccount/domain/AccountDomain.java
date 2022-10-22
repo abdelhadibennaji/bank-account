@@ -12,8 +12,9 @@ public class AccountDomain {
         return new AccountDomain(balanceDomain);
     }
 
-    public AccountDomain deposit(AmountDomain newAmount) {
-        return null;
+    public AccountDomain deposit(AmountDomain amountDomain) {
+        BalanceDomain balanceDomain = this.balanceDomain.addAmount(amountDomain);
+        return from(balanceDomain);
     }
 
     public BalanceDomain getBalance() {
