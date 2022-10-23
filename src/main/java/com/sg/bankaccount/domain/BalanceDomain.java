@@ -24,6 +24,10 @@ public class BalanceDomain {
         return from(amountDomain1);
     }
 
+    public AmountDomain getAmountDomain() {
+        return amountDomain;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
