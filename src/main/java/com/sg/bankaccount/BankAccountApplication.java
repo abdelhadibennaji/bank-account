@@ -39,6 +39,7 @@ public class BankAccountApplication {
             withdrawal(accountNumber, new BigDecimal(150), accountService);
             deposit(accountNumber, new BigDecimal(200), accountService);
             withdrawal(accountNumber, new BigDecimal(210), accountService);
+            withdrawal(accountNumber, new BigDecimal(50), accountService);
 
             printOperations(accountNumber, operationRepository);
             withdrawal(accountNumber+"2", new BigDecimal(201), accountService);
