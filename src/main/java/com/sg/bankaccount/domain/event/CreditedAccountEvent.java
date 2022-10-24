@@ -1,11 +1,18 @@
 package com.sg.bankaccount.domain.event;
 
-import com.sg.bankaccount.domain.dto.Operation;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
-@Builder
+@Getter
 public class CreditedAccountEvent implements AccountEvent {
-    private Operation operation;
+
+    private OperationEvent operation;
+
+    private CreditedAccountEvent(OperationEvent operation) {
+        this.operation = operation;
+    }
+
+    public static CreditedAccountEvent from(OperationEvent operation) {
+        return new CreditedAccountEvent(operation);
+    }
+
 }

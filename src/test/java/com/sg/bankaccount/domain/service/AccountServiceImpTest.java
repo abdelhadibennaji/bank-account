@@ -1,8 +1,8 @@
 package com.sg.bankaccount.domain.service;
 
-import com.sg.bankaccount.domain.AccountDomain;
-import com.sg.bankaccount.domain.AmountDomain;
-import com.sg.bankaccount.domain.BalanceDomain;
+import com.sg.bankaccount.domain.bankaccount.AccountDomain;
+import com.sg.bankaccount.domain.bankaccount.AmountDomain;
+import com.sg.bankaccount.domain.bankaccount.BalanceDomain;
 import com.sg.bankaccount.domain.exception.BankAccountNotFoundException;
 import com.sg.bankaccount.domain.exception.InsufficientBalanceException;
 import org.junit.jupiter.api.Test;

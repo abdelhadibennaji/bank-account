@@ -1,7 +1,7 @@
 package com.sg.bankaccount;
 
-import com.sg.bankaccount.domain.AccountDomain;
-import com.sg.bankaccount.domain.AmountDomain;
+import com.sg.bankaccount.domain.bankaccount.AccountDomain;
+import com.sg.bankaccount.domain.bankaccount.AmountDomain;
 import com.sg.bankaccount.domain.exception.BankAccountNotFoundException;
 import com.sg.bankaccount.domain.exception.InsufficientBalanceException;
 import com.sg.bankaccount.domain.service.AccountService;
@@ -17,6 +17,10 @@ import org.springframework.context.annotation.Bean;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 @SpringBootApplication
 public class BankAccountApplication {
@@ -32,9 +36,10 @@ public class BankAccountApplication {
             createNewAccount(accountNumber, accountRepository);
             deposit(accountNumber, new BigDecimal(100), accountService);
             withdrawal(accountNumber, new BigDecimal(50), accountService);
-            withdrawal(accountNumber, new BigDecimal(50), accountService);
+            withdrawal(accountNumber, new BigDecimal(150), accountService);
             deposit(accountNumber, new BigDecimal(200), accountService);
-            withdrawal(accountNumber, new BigDecimal(201), accountService);
+            withdrawal(accountNumber, new BigDecimal(210), accountService);
+
             printOperations(accountNumber, operationRepository);
             withdrawal(accountNumber+"2", new BigDecimal(201), accountService);
         };
@@ -75,8 +80,8 @@ public class BankAccountApplication {
     }
 
     private void printOperations(String accountNumber, OperationRepository operationRepository) {
-        System.out.println("I want to print operations history of account "+accountNumber+ " : ");
-        List<OperationEntity> operationEntities = operationRepository.findByAccountEntity_AccountNumber(accountNumber);
+         System.out.println("I want to print operations history of account "+accountNumber+ " : ");
+        List<OperationEntity> operationEntities = operationRepository.findByAccountEntity_AccountNumberOrderByOperationDate(accountNumber);
         System.out.format("%20s%3s%25s%3s%20s", "Operation type", "  |", "Operation Date", "  |", "Operation amount\n");
         for (OperationEntity operationEntity: operationEntities) {
             System.out.format("%20s%3s%25s%3s%20s", operationEntity.getOperationType(), "  |", operationEntity.getOperationDate(), "  |", operationEntity.getAmount().doubleValue()+"\n");

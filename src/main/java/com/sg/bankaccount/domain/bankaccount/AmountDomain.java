@@ -1,4 +1,4 @@
-package com.sg.bankaccount.domain;
+package com.sg.bankaccount.domain.bankaccount;
 
 import com.sg.bankaccount.domain.exception.NegativeAmountException;
 import com.sg.bankaccount.domain.exception.NegativeBalanceException;
@@ -11,7 +11,7 @@ public class AmountDomain {
     private BigDecimal value;
 
     private AmountDomain(BigDecimal value) {
-        if(value.doubleValue()<0) throw new NegativeAmountException("Amount can not be negative");
+        if(value.compareTo(BigDecimal.ZERO)<0) throw new NegativeAmountException("Amount can not be negative");
         this.value = value;
     }
 

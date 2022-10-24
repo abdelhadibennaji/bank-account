@@ -1,9 +1,9 @@
 package com.sg.bankaccount.domain.service;
 
-import com.sg.bankaccount.domain.AccountDomain;
-import com.sg.bankaccount.domain.AmountDomain;
-import com.sg.bankaccount.domain.BalanceDomain;
-import com.sg.bankaccount.domain.dto.Operation;
+import com.sg.bankaccount.domain.bankaccount.AccountDomain;
+import com.sg.bankaccount.domain.bankaccount.AmountDomain;
+import com.sg.bankaccount.domain.bankaccount.BalanceDomain;
+import com.sg.bankaccount.domain.event.OperationEvent;
 import com.sg.bankaccount.domain.event.CreditedAccountEvent;
 import com.sg.bankaccount.domain.event.DebitedAccountEvent;
 import com.sg.bankaccount.domain.exception.BankAccountNotFoundException;
@@ -24,7 +24,7 @@ public class AccountServiceImp implements AccountService {
         try {
             AccountDomain accountDomain = getAccountDomainByAccountNumber(accountNumber);
             accountDomain = accountDomain.deposit(amountDomain);
-            saveDebitedAccountEvent(accountDomain, accountNumber, amountDomain);
+            publishDebitedAccountEvent(accountDomain, accountNumber, amountDomain);
             return accountDomain;
         } catch (BankAccountNotFoundException e) {
             throw new BankAccountNotFoundException("The bank account is not found");
@@ -36,7 +36,7 @@ public class AccountServiceImp implements AccountService {
         try {
             AccountDomain accountDomain = getAccountDomainByAccountNumber(accountNumber);
             accountDomain = accountDomain.withdrawal(amountDomain);
-            saveCreditedAccountEvent(accountDomain, accountNumber, amountDomain);
+            publishCreditedAccountEvent(accountDomain, accountNumber, amountDomain);
             return accountDomain;
         } catch (BankAccountNotFoundException e) {
             throw new BankAccountNotFoundException("The bank account is not found");
@@ -54,27 +54,21 @@ public class AccountServiceImp implements AccountService {
         return accountPort.findBalanceByAccountNumber(accountNumber);
     }
 
-    private void saveCreditedAccountEvent(AccountDomain accountDomain, String accountNumber, AmountDomain amountDomain) {
-        CreditedAccountEvent creditedAccountEvent = CreditedAccountEvent.builder()
-                .operation(Operation
-                        .builder()
-                        .accountNumber(accountNumber)
-                        .amount(amountDomain.getValue().negate())
-                        .operationDate(LocalDateTime.now())
-                        .balance(accountDomain.getBalance().getAmountDomain().getValue()).build())
-                .build();
-        accountPort.saveEvent(creditedAccountEvent);
+    private void publishCreditedAccountEvent(AccountDomain accountDomain, String accountNumber, AmountDomain amountDomain) {
+        CreditedAccountEvent creditedAccountEvent = CreditedAccountEvent.from(
+                OperationEvent.from(
+                        accountNumber, amountDomain.getValue().negate(),
+                        accountDomain.getBalance().getAmountDomain().getValue(), LocalDateTime.now()
+                ));
+        accountPort.publishEvent(creditedAccountEvent);
     }
 
-    private void saveDebitedAccountEvent(AccountDomain accountDomain, String accountNumber, AmountDomain amountDomain)  {
-        DebitedAccountEvent debitedAccountEvent = DebitedAccountEvent.builder()
-                .operation(Operation
-                        .builder()
-                        .accountNumber(accountNumber)
-                        .amount(amountDomain.getValue())
-                        .operationDate(LocalDateTime.now())
-                        .balance(accountDomain.getBalance().getAmountDomain().getValue()).build())
-                .build();
-        accountPort.saveEvent(debitedAccountEvent);
+    private void publishDebitedAccountEvent(AccountDomain accountDomain, String accountNumber, AmountDomain amountDomain) {
+        DebitedAccountEvent debitedAccountEvent = DebitedAccountEvent.from(
+                OperationEvent.from(
+                        accountNumber, amountDomain.getValue(),accountDomain.getBalance().getAmountDomain().getValue(),
+                        LocalDateTime.now()
+                ));
+        accountPort.publishEvent(debitedAccountEvent);
     }
 }

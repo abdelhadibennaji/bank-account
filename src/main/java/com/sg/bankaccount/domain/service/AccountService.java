@@ -1,7 +1,7 @@
 package com.sg.bankaccount.domain.service;
 
-import com.sg.bankaccount.domain.AccountDomain;
-import com.sg.bankaccount.domain.AmountDomain;
+import com.sg.bankaccount.domain.bankaccount.AccountDomain;
+import com.sg.bankaccount.domain.bankaccount.AmountDomain;
 
 public interface AccountService {
 

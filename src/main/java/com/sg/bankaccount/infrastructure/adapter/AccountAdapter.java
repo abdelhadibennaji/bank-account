@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.sg.bankaccount.domain.AmountDomain;
-import com.sg.bankaccount.domain.BalanceDomain;
+import com.sg.bankaccount.domain.bankaccount.AmountDomain;
+import com.sg.bankaccount.domain.bankaccount.BalanceDomain;
 import com.sg.bankaccount.domain.enums.AccountEventType;
 import com.sg.bankaccount.domain.event.CreditedAccountEvent;
 import com.sg.bankaccount.domain.event.DebitedAccountEvent;
@@ -31,7 +31,8 @@ public class AccountAdapter implements AccountPort {
 
     private OperationRepository operationRepository;
 
-    public AccountAdapter(EventStoreRepository eventStoreRepository, AccountRepository accountRepository, OperationRepository operationRepository) {
+    public AccountAdapter(EventStoreRepository eventStoreRepository, AccountRepository accountRepository,
+                          OperationRepository operationRepository) {
         this.eventStoreRepository = eventStoreRepository;
         this.accountRepository = accountRepository;
         this.operationRepository = operationRepository;
@@ -45,7 +46,7 @@ public class AccountAdapter implements AccountPort {
     }
 
     @Override
-    public void saveEvent(CreditedAccountEvent event) {
+    public void publishEvent(CreditedAccountEvent event) {
         try {
             EventStore eventStore = new EventStore();
             ObjectMapper mapper = JsonMapper.builder()
@@ -73,7 +74,7 @@ public class AccountAdapter implements AccountPort {
     }
 
     @Override
-    public void saveEvent(DebitedAccountEvent event) {
+    public void publishEvent(DebitedAccountEvent event) {
         try {
             EventStore eventStore = new EventStore();
             ObjectMapper mapper = JsonMapper.builder()
@@ -100,6 +101,6 @@ public class AccountAdapter implements AccountPort {
         } catch (JsonProcessingException e) {
             throw new TechnicalException("Error during converting object operation to json");
         }
-
     }
+
 }

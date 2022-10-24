@@ -1,4 +1,4 @@
-package com.sg.bankaccount.domain;
+package com.sg.bankaccount.domain.bankaccount;
 
 import com.sg.bankaccount.domain.exception.InsufficientBalanceException;
 import com.sg.bankaccount.domain.exception.NegativeBalanceException;
