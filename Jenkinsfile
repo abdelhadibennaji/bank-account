@@ -37,7 +37,17 @@ pipeline {
 		           }
 	           }	
            }
-       }
-    
+    }
+
+
+    stage("Quality Gate"){
+           steps {
+               script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
+                }	
+            }
+
+        }
+	  
   }
 }
